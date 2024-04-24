@@ -1,8 +1,10 @@
 {
   "name": "excalidraw-app",
   "version": "1.0.0",
+  "author": "Excalidraw",
+  "description": "Excalidraw desktop app",
+  "main": "main.js",
   "private": true,
-  "homepage": ".",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -25,6 +27,57 @@
   "engines": {
     "node": ">=18.0.0"
   },
+  "build": {
+    "appId": "tech.oneal.app.excalidraw",
+    "productName": "Excalidraw",
+    "files": [
+      "build/**/*",
+      "./main.js"
+    ],
+    "dmg": {
+      "iconSize": 100,
+      "contents": [
+        {
+          "x": 410,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 130,
+          "y": 150,
+          "type": "file"
+        }
+      ],
+      "window": {
+        "width": 500,
+        "height": 300
+      }
+    },
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        "zip"
+      ],
+      "icon": "./public/icon.icns"
+    },
+    "win": {
+      "target": [
+        "portable",
+        "nsis"
+      ]
+    },
+    "linux": {
+      "category": "Development"
+    }
+  },
   "dependencies": {
     "vite-plugin-html": "3.2.2"
   },
@@ -35,8 +88,13 @@
     "build:app": "cross-env VITE_APP_GIT_SHA=$VERCEL_GIT_COMMIT_SHA vite build",
     "build:version": "node ../scripts/build-version.js",
     "build": "yarn build:app && yarn build:version",
+    "package-mac": "rm -rf build && npm run build && electron-builder build --mac",
     "start": "yarn && vite",
     "start:production": "npm run build && npx http-server build -a localhost -p 5001 -o",
     "build:preview": "yarn build && vite preview --port 5000"
+  },
+  "devDependencies": {
+    "electron": "30.0.1",
+    "electron-builder": "24.13.3"
   }
 }
